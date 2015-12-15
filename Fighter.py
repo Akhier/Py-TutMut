@@ -1,6 +1,7 @@
 import libtcodpy as libtcod
 import settings
 from message import message
+from Equipment import get_all_equipped
 
 
 class Fighter:

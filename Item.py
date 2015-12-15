@@ -1,6 +1,7 @@
 import libtcodpy as libtcod
 import settings
 from message import message
+from render import render_all
 
 
 class Item:

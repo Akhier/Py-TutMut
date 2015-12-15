@@ -1,6 +1,5 @@
 import libtcodpy as libtcod
 import settings
-import Game
 
 
 def menu(header, options, width):
@@ -50,6 +49,7 @@ def msgbox(text, width=50):
 
 
 def main_menu():
+    import Game
     img = libtcod.image_load('terminal12x12_gs_ro.png')
 
     while not libtcod.console_is_window_closed():
@@ -80,3 +80,21 @@ def main_menu():
             Game.play_game()
         elif choice == 2:
             break
+
+
+def inventory_menu(header):
+    if len(settings.inventory) == 0:
+        options = ['Inventory is empty.']
+    else:
+        options = []
+        for item in settings.inventory:
+            text = item.name
+            if item.equipment and item.equipment.is_equipped:
+                text = text + ' (on ' + item.equipment.slot + ')'
+            options.append(text)
+
+    index = menu(header, options, settings.INVENTORY_WIDTH)
+
+    if index is None or len(settings.inventory) == 0:
+        return None
+    return settings.inventory[index].item

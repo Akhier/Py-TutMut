@@ -1,3 +1,4 @@
+import libtcodpy as libtcod
 import settings
 import math
 from Item import Item
@@ -60,17 +61,19 @@ class Object:
         settings.objects.remove(self)
         settings.objects.insert(0, self)
 
-#    def draw(self):
-#        if (libtcod.map_is_in_fov(fov_map, self.x, self.y) or
-#                (self.always_visible and map[self.x][self.y].explored)):
-#            libtcod.console_set_default_foreground(con, self.color)
-#            libtcod.console_put_char(con, self.x, self.y, self.char,
-#                                     libtcod.BKGND_NONE)
+    def draw(self):
+        if (libtcod.map_is_in_fov(settings.fov_map, self.x, self.y) or
+                (self.always_visible and
+                    settings.map[self.x][self.y].explored)):
+            libtcod.console_set_default_foreground(settings.con, self.color)
+            libtcod.console_put_char(settings.con, self.x, self.y, self.char,
+                                     libtcod.BKGND_NONE)
 
-#    def clear(self):
-#        if libtcod.map_is_in_fov(fov_map, self.x, self.y):
-#            libtcod.console_put_char_ex(con, self.x, self.y, '.',
-#                                        libtcod.white, color_light_ground)
+    def clear(self):
+        if libtcod.map_is_in_fov(settings.fov_map, self.x, self.y):
+            libtcod.console_put_char_ex(settings.con, self.x, self.y,
+                                        '.', libtcod.white,
+                                        settings.color_light_ground)
 
 
 def is_blocked(x, y):

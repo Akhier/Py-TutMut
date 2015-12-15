@@ -7,25 +7,28 @@ from Fighter import player_death
 from Map import make_map
 from message import message
 from Equipment import Equipment
+from render import render_all
+from Menu import menu
+from handle_keys import handle_keys
+from handle_keys import initialize_fov
 
 
 def new_game():
-    global player, inventory, game_msgs, game_state, dungeon_level
 
     fighter_component = Fighter(hp=30, defense=2, power=5,
                                 xp=0, death_function=player_death)
-    player = Object(0, 0, '@', 'player', libtcod.white, blocks=True,
-                    fighter=fighter_component)
+    settings.player = Object(0, 0, '@', 'player', libtcod.white, blocks=True,
+                             fighter=fighter_component)
 
-    player.level = 1
-    dungeon_level = 1
+    settings.player.level = 1
+    settings.dungeon_level = 1
     make_map()
     initialize_fov()
 
-    game_state = 'playing'
+    settings.game_state = 'playing'
     inventory = []
 
-    game_msgs = []
+    settings.game_msgs = []
 
     message('Welcome stranger. Prepare to perish in the ' +
             'Tombs of the Ancient Kings.', libtcod.red)
@@ -39,8 +42,6 @@ def new_game():
 
 
 def play_game():
-    global key, mouse, objects, game_state, player_action
-
     settings.player_action = None
 
     settings.mouse = libtcod.Mouse()
@@ -74,11 +75,11 @@ def load_game():
     file = shelve.open('savegame.save', 'r')
     settings.map = file['map']
     settings.objects = file['objects']
-    settings.player = objects[file['player_index']]
+    settings.player = settings.objects[file['player_index']]
     settings.inventory = file['inventory']
     settings.game_msgs = file['game_msgs']
     settings.game_state = file['game_state']
-    settings.stairs = objects[file['stairs_index']]
+    settings.stairs = settings.objects[file['stairs_index']]
     settings.dungeon_level = file['dungeon_level']
     file.close()
 
@@ -98,26 +99,30 @@ def save_game():
     file.close()
 
 
-def next_level():
-    message('You take a moment to rest, and recover your strength',
-            libtcod.light_violet)
-    player.fighter.heal(player.fighter.max_hp / 2)
+def check_level_up():
+    level_up_xp = settings.LEVEL_UP_BASE + settings.player.level * \
+        settings.LEVEL_UP_FACTOR
+    if settings.player.fighter.xp >= level_up_xp:
+        settings.player.level += 1
+        settings.player.fighter.xp -= level_up_xp
+        message('Your battle skills grow stronger. You reached level ' +
+                str(settings.player.level) + '.', libtcod.yellow)
 
-    settings.dungeon_level += 1
-    message('After a rare moment of peace, you descend deeper into ' +
-            'the heart of the dungeon...', libtcod.red)
-    make_map()
-    initialize_fov()
+        choice = None
+        while choice is None:
+            choice = menu('Level up! Choose a stat to raise:\n',
+                          ['Constitution (+20 HP, from ' +
+                           str(settings.player.fighter.max_hp) + ')',
+                           'Strength (+1 attack, from ' +
+                           str(settings.player.fighter.power) + ')',
+                           'Agility (+1 defense, from ' +
+                           str(settings.player.fighter.defense) + ')'],
+                          settings.LEVEL_SCREEN_WIDTH)
 
-
-def initialize_fov():
-    settings.fov_recompute = True
-
-    settings.fov_map = libtcod.map_new(settings.MAP_WIDTH, settings.MAP_HEIGHT)
-    for y in range(settings.MAP_HEIGHT):
-        for x in range(settings.MAP_WIDTH):
-            libtcod.map_set_properties(settings.fov_map, x, y,
-                                       not settings.map[x][y].block_sight,
-                                       not settings.map[x][y].blocked)
-
-    libtcod.console_clear(settings.con)
+        if choice == 0:
+            settings.player.fighter.max_hp += 20
+            settings.player.fighter.hp += 20
+        elif choice == 1:
+            settings.player.fighter.power += 1
+        elif choice == 2:
+            settings.player.fighter.defense += 1
