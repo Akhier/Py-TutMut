@@ -4,6 +4,7 @@ import Item
 from Tile import Tile
 from Rect import Rect
 from Object import Object
+from Object import is_blocked
 from Fighter import Fighter
 from Fighter import monster_death
 from Equipment import Equipment
@@ -11,12 +12,10 @@ from AI import BasicMonster
 
 
 def make_map():
-    global map, objects, stairs, player
+    settings.objects = [settings.player]
 
-    objects = [player]
-
-    map = [[Tile(True) for y in range(settings.MAP_HEIGHT)]
-           for x in range(settings.MAP_WIDTH)]
+    settings.map = [[Tile(True) for y in range(settings.MAP_HEIGHT)]
+                    for x in range(settings.MAP_WIDTH)]
 
     rooms = []
     num_rooms = 0
@@ -43,8 +42,8 @@ def make_map():
             (new_x, new_y) = new_room.center()
 
             if num_rooms == 0:
-                player.x = new_x
-                player.y = new_y
+                settings.player.x = new_x
+                settings.player.y = new_y
             else:
                 (prev_x, prev_y) = rooms[num_rooms - 1].center()
                 if libtcod.random_get_int(0, 0, 1) == 1:
@@ -57,32 +56,29 @@ def make_map():
             rooms.append(new_room)
             num_rooms += 1
 
-    stairs = Object(new_x, new_y, '<', 'stairs',
-                    libtcod.white, always_visible=True)
-    objects.append(stairs)
-    stairs.send_to_back()
+    settings.stairs = Object(new_x, new_y, '<', 'stairs',
+                             libtcod.white, always_visible=True)
+    settings.objects.append(settings.stairs)
+    settings.stairs.send_to_back()
 
 
 def create_room(room):
-    global map
     for x in range(room.x1 + 1, room.x2):
         for y in range(room.y1 + 1, room.y2):
-            map[x][y].blocked = False
-            map[x][y].block_sight = False
+            settings.map[x][y].blocked = False
+            settings.map[x][y].block_sight = False
 
 
 def create_h_tunnel(x1, x2, y):
-    global map
     for x in range(min(x1, x2), max(x1, x2) + 1):
-        map[x][y].blocked = False
-        map[x][y].block_sight = False
+        settings.map[x][y].blocked = False
+        settings.map[x][y].block_sight = False
 
 
 def create_v_tunnel(y1, y2, x):
-    global map
     for y in range(min(y1, y2), max(y1, y2) + 1):
-        map[x][y].blocked = False
-        map[x][y].block_sight = False
+        settings.map[x][y].blocked = False
+        settings.map[x][y].block_sight = False
 
 
 def place_objects(room):
@@ -127,7 +123,7 @@ def place_objects(room):
                                  blocks=True, fighter=fighter_component,
                                  ai=ai_component)
 
-            objects.append(monster)
+            settings.objects.append(monster)
 
     num_items = libtcod.random_get_int(0, 0, max_items)
 
@@ -163,7 +159,7 @@ def place_objects(room):
                                                 defense_bonus=1)
                 item = Object(x, y, '[', 'shield', libtcod.darker_orange,
                               equipment=equipment_component)
-            objects.append(item)
+            settings.objects.append(item)
             item.send_to_back()
             item.always_visible = True
 
@@ -173,17 +169,6 @@ def from_dungeon_level(table):
         if settings.dungeon_level >= level:
             return value
     return 0
-
-
-def is_blocked(x, y):
-    if settings.map[x][y].blocked:
-        return True
-
-    for object in settings.objects:
-        if object.blocks and object.x == x and object.y == y:
-            return True
-
-    return False
 
 
 def random_choice(chances_dict):

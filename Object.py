@@ -1,3 +1,8 @@
+import settings
+import math
+from Item import Item
+
+
 class Object:
 
     def __init__(self, x, y, char, name, color, blocks=False,
@@ -52,9 +57,8 @@ class Object:
         return math.sqrt((x - self.x) ** 2 + (y - self.y) ** 2)
 
     def send_to_back(self):
-        global objects
-        objects.remove(self)
-        objects.insert(0, self)
+        settings.objects.remove(self)
+        settings.objects.insert(0, self)
 
 #    def draw(self):
 #        if (libtcod.map_is_in_fov(fov_map, self.x, self.y) or
@@ -67,3 +71,14 @@ class Object:
 #        if libtcod.map_is_in_fov(fov_map, self.x, self.y):
 #            libtcod.console_put_char_ex(con, self.x, self.y, '.',
 #                                        libtcod.white, color_light_ground)
+
+
+def is_blocked(x, y):
+    if settings.map[x][y].blocked:
+        return True
+
+    for object in settings.objects:
+        if object.blocks and object.x == x and object.y == y:
+            return True
+
+    return False

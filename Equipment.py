@@ -36,18 +36,16 @@ class Equipment:
 
 
 def get_equipped_in_slot(slot):
-    global inventory
-    for obj in inventory:
+    for obj in settings.inventory:
         if (obj.equipment and obj.equipment.slot == slot and
                 obj.equipment.is_equipped):
             return obj.equipment
 
 
 def get_all_equipped(obj):
-    global player
-    if obj == player:
+    if obj == settings.player:
         equipped_list = []
-        for item in inventory:
+        for item in settings.inventory:
             if item.equipment and item.equipment.is_equipped:
                 equipped_list.append(item.equipment)
         return equipped_list

@@ -47,26 +47,22 @@ color_light_ground = libtcod.Color(200, 180, 50)
 con = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
 panel = libtcod.console_new(SCREEN_WIDTH, PANEL_HEIGHT)
 
+dungeon_level = 1
+fov_map = libtcod.map_new(MAP_WIDTH, MAP_HEIGHT)
+fov_recompute = True
+game_msgs = []
+game_state = 'start_up'
+inventory = []
+key = libtcod.Key()
+map = [[Tile(True) for y in range(MAP_HEIGHT)]
+       for x in range(MAP_WIDTH)]
+mouse = libtcod.Mouse()
+objects = []
+player = Object(0, 0, '@', 'player', libtcod.white)
+stairs = Object(0, 0, '<', 'stairs', libtcod.white)
+
 
 def init():
-    global dungeon_level, fov_map, fov_recompute, \
-        game_msgs, game_state, inventory, key, \
-        map, mouse, objects, player, stairs
-
-    dungeon_level = 1
-    fov_map = libtcod.map_new(MAP_WIDTH, MAP_HEIGHT)
-    fov_recompute = True
-    game_msgs = []
-    game_state = 'start_up'
-    inventory = []
-    key = libtcod.Key()
-    map = [[Tile(True) for y in range(MAP_HEIGHT)]
-           for x in range(MAP_WIDTH)]
-    mouse = libtcod.Mouse()
-    objects = []
-    player = Object(0, 0, '@', 'player', libtcod.white)
-    stairs = Object(0, 0, '<', 'stairs', libtcod.white)
-
     libtcod.console_set_custom_font('terminal12x12_gs_ro.png',
                                     libtcod.FONT_TYPE_GREYSCALE |
                                     libtcod.FONT_LAYOUT_ASCII_INROW)

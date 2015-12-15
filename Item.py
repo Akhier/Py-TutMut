@@ -5,18 +5,16 @@ from message import message
 
 class Item:
 
-    global inventory, objects, player
-
     def __init__(self, use_function=None):
         self.use_function = use_function
 
     def pick_up(self):
-        if len(inventory) >= 26:
+        if len(settings.inventory) >= 26:
             message('Your inventory is full, you cannot pick up ' +
                     self.owner.name + '.', libtcod.red)
         else:
-            inventory.append(self.owner)
-            objects.remove(self.owner)
+            settings.inventory.append(self.owner)
+            settings.objects.remove(self.owner)
             message('You picked up a ' + self.owner.name + '.', libtcod.green)
 
             equipment = self.owner.equipment
@@ -27,10 +25,10 @@ class Item:
         if self.owner.equipment:
             self.owner.equipment.dequip()
 
-        objects.append(self.owner)
-        inventory.remove(self.owner)
-        self.owner.x = player.x
-        self.owner.y = player.y
+        settings.objects.append(self.owner)
+        settings.inventory.remove(self.owner)
+        self.owner.x = settings.player.x
+        self.owner.y = settings.player.y
         message('You dropped a ' + self.owner.name + '.', libtcod.yellow)
 
     def use(self):
@@ -42,16 +40,16 @@ class Item:
             message('The ' + self.owner.name + ' cannot be used.')
         else:
             if self.use_function() != 'cancelled':
-                inventory.remove(self.owner)
+                settings.inventory.remove(self.owner)
 
 
 def cast_heal():
-    if player.fighter.hp == player.fighter.max_hp:
+    if settings.player.fighter.hp == settings.player.fighter.max_hp:
         message('You are already at full health.', libtcod.red)
         return 'cancel'
 
     message('Your wounds start to feel better.', libtcod.light_violet)
-    player.fighter.heal(settings.HEAL_AMOUNT)
+    settings.player.fighter.heal(settings.HEAL_AMOUNT)
 
 
 def cast_lightning():
@@ -76,7 +74,7 @@ def cast_fireball():
     message('The fireball explodes, burning everything within ' +
             str(settings.FIREBALL_RADIUS) + ' tiles.', libtcod.orange)
 
-    for obj in objects:
+    for obj in settings.objects:
         if obj.distance(x, y) <= settings.FIREBALL_RADIUS and obj.fighter:
             message('The ' + obj.name + ' gets burned for ' +
                     str(settings.FIREBALL_DAMAGE) +
@@ -101,15 +99,46 @@ def cast_confuse():
 
 
 def closest_monster(max_range):
-    global fov_map, player, objects
     closest_enemy = None
     closest_dist = max_range + 1
 
-    for object in objects:
-        if object.fighter and not object == player and \
-           libtcod.map_is_in_fov(fov_map, object.x, object.y):
-            dist = player.distance_to(object)
+    for object in settings.objects:
+        if object.fighter and not object == settings.player and \
+           libtcod.map_is_in_fov(settings.fov_map, object.x, object.y):
+            dist = settings.player.distance_to(object)
             if dist < closest_dist:
                 closest_enemy = object
                 closest_dist = dist
     return closest_enemy
+
+
+def target_tile(max_range=None):
+    global key, mouse
+    while True:
+        libtcod.console_flush()
+        libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS |
+                                    libtcod.EVENT_MOUSE, key, mouse)
+        render_all()
+
+        (x, y) = (mouse.cx, mouse.cy)
+
+        if mouse.rbutton_pressed or key.vk == libtcod.KEY_ESCAPE:
+            return (None, None)
+
+        if (settings.mouse.lbutton_pressed and
+            libtcod.map_is_in_fov(settings.fov_map, x, y) and
+            (max_range is None or
+             settings.player.distance(x, y) <= max_range)):
+            return (x, y)
+
+
+def target_monster(max_range=None):
+    while True:
+        (x, y) = target_tile(max_range)
+        if x is None:
+            return None
+
+        for obj in settings.objects:
+            if obj.x == x and obj.y == y and \
+                    obj.fighter and obj != settings.player:
+                return obj

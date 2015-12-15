@@ -5,8 +5,6 @@ from message import message
 
 class Fighter:
 
-    global player
-
     def __init__(self, hp, defense, power, xp, death_function=None):
         self.base_max_hp = hp
         self.hp = hp
@@ -51,8 +49,8 @@ class Fighter:
                 function = self.death_function
                 if function is not None:
                     function(self.owner)
-                if self.owner != player:
-                    player.fighter.xp += self.xp
+                if self.owner != settings.player:
+                    settings.player.fighter.xp += self.xp
 
     def heal(self, amount):
         self.hp += amount
@@ -65,8 +63,8 @@ def player_death(player):
     print('you died.')
     game_state = 'dead'
 
-    player.char = '%'
-    player.color = libtcod.dark_red
+    settings.player.char = '%'
+    settings.player.color = libtcod.dark_red
 
 
 def monster_death(monster):
