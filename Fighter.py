@@ -1,5 +1,6 @@
 import libtcodpy as libtcod
 import settings
+from message import message
 
 
 class Fighter:

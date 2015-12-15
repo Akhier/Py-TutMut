@@ -4,6 +4,7 @@ import settings
 from Object import Object
 from Fighter import Fighter
 from Fighter import player_death
+from Map import make_map
 
 
 def new_game():
@@ -95,3 +96,30 @@ def save_game():
     file['stairs_index'] = objects.index(stairs)
     file['dungeon_level'] = dungeon_level
     file.close()
+
+
+def next_level():
+    global dungeon_level
+    message('You take a moment to rest, and recover your strength',
+            libtcod.light_violet)
+    player.fighter.heal(player.fighter.max_hp / 2)
+
+    dungeon_level += 1
+    message('After a rare moment of peace, you descend deeper into ' +
+            'the heart of the dungeon...', libtcod.red)
+    make_map()
+    initialize_fov()
+
+
+def initialize_fov():
+    global fov_recompute, fov_map, con
+    fov_recompute = True
+
+    fov_map = libtcod.map_new(settings.MAP_WIDTH, settings.MAP_HEIGHT)
+    for y in range(settings.MAP_HEIGHT):
+        for x in range(settings.MAP_WIDTH):
+            libtcod.map_set_properties(fov_map, x, y,
+                                       not map[x][y].block_sight,
+                                       not map[x][y].blocked)
+
+    libtcod.console_clear(con)
