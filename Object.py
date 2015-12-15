@@ -56,16 +56,14 @@ class Object:
         objects.remove(self)
         objects.insert(0, self)
 
-    def draw(self):
-        # if (libtcod.map_is_in_fov(fov_map, self.x, self.y) or
-        #        (self.always_visible and map[self.x][self.y].explored)):
-        #    libtcod.console_set_default_foreground(con, self.color)
-        #    libtcod.console_put_char(con, self.x, self.y, self.char,
-        #                             libtcod.BKGND_NONE)
-        break
+#    def draw(self):
+#        if (libtcod.map_is_in_fov(fov_map, self.x, self.y) or
+#                (self.always_visible and map[self.x][self.y].explored)):
+#            libtcod.console_set_default_foreground(con, self.color)
+#            libtcod.console_put_char(con, self.x, self.y, self.char,
+#                                     libtcod.BKGND_NONE)
 
-    def clear(self):
-        # if libtcod.map_is_in_fov(fov_map, self.x, self.y):
-        #    libtcod.console_put_char_ex(con, self.x, self.y, '.',
-        #                                libtcod.white, color_light_ground)
-        break
+#    def clear(self):
+#        if libtcod.map_is_in_fov(fov_map, self.x, self.y):
+#            libtcod.console_put_char_ex(con, self.x, self.y, '.',
+#                                        libtcod.white, color_light_ground)

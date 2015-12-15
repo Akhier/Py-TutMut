@@ -1,3 +1,7 @@
 #library stuff
 *.dll
 *.so
+
+#python stuff
+*.pyc
+__pycache__
