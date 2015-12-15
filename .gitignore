@@ -1,7 +1,10 @@
-#library stuff
+#library
 *.dll
 *.so
 
-#python stuff
+#python
 *.pyc
 __pycache__
+
+#game
+*.save
