@@ -1,5 +1,9 @@
+import libtcodpy as libtcod
 import shelve
 import settings
+from Object import Object
+from Fighter import Fighter
+from Fighter import player_death
 
 
 def new_game():
