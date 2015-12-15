@@ -1,5 +1,6 @@
 import libtcodpy as libtcod
-
+from Tile import Tile
+from Object import Object
 
 SCREEN_WIDTH = 80
 SCREEN_HEIGHT = 50
@@ -42,6 +43,7 @@ LIMIT_FPS = 20
 def init():
     global color_dark_ground, color_light_ground, \
         color_dark_wall, color_light_wall
+
     color_dark_wall = libtcod.Color(0, 0, 100)
     color_light_wall = libtcod.Color(130, 110, 50)
     color_dark_ground = libtcod.Color(50, 50, 150)
@@ -50,3 +52,17 @@ def init():
     global dungeon_level, fov_map, fov_recompute, \
         game_msgs, game_state, inventory, key, \
         map, mouse, objects, player, stairs
+
+    dungeon_level = 1
+    fov_map = libtcod.map_new(MAP_WIDTH, MAP_HEIGHT)
+    fov_recompute = True
+    game_msgs = []
+    game_state = 'start_up'
+    inventory = []
+    key = libtcod.Key()
+    map = [[Tile(True) for y in range(MAP_HEIGHT)]
+           for x in range(MAP_WIDTH)]
+    mouse = libtcod.Mouse()
+    objects = []
+    player = Object(0, 0, '@', 'player', libtcod.white)
+    stairs = Object(0, 0, '<', 'stairs', libtcod.white)
