@@ -39,16 +39,16 @@ TORCH_RADIUS = 10
 
 LIMIT_FPS = 20
 
+color_dark_wall = libtcod.Color(0, 0, 100)
+color_light_wall = libtcod.Color(130, 110, 50)
+color_dark_ground = libtcod.Color(50, 50, 150)
+color_light_ground = libtcod.Color(200, 180, 50)
+
+con = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
+panel = libtcod.console_new(SCREEN_WIDTH, PANEL_HEIGHT)
+
 
 def init():
-    global color_dark_ground, color_light_ground, \
-        color_dark_wall, color_light_wall
-
-    color_dark_wall = libtcod.Color(0, 0, 100)
-    color_light_wall = libtcod.Color(130, 110, 50)
-    color_dark_ground = libtcod.Color(50, 50, 150)
-    color_light_ground = libtcod.Color(200, 180, 50)
-
     global dungeon_level, fov_map, fov_recompute, \
         game_msgs, game_state, inventory, key, \
         map, mouse, objects, player, stairs
@@ -73,8 +73,3 @@ def init():
     libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT,
                               'basicroguelike', False)
     libtcod.sys_set_fps(LIMIT_FPS)
-
-    global con, panel
-
-    con = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
-    panel = libtcod.console_new(SCREEN_WIDTH, PANEL_HEIGHT)
