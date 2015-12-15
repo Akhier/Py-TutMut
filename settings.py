@@ -66,3 +66,15 @@ def init():
     objects = []
     player = Object(0, 0, '@', 'player', libtcod.white)
     stairs = Object(0, 0, '<', 'stairs', libtcod.white)
+
+    libtcod.console_set_custom_font('terminal12x12_gs_ro.png',
+                                    libtcod.FONT_TYPE_GREYSCALE |
+                                    libtcod.FONT_LAYOUT_ASCII_INROW)
+    libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT,
+                              'basicroguelike', False)
+    libtcod.sys_set_fps(LIMIT_FPS)
+
+    global con, panel
+
+    con = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
+    panel = libtcod.console_new(SCREEN_WIDTH, PANEL_HEIGHT)
