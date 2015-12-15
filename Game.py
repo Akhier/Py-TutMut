@@ -14,7 +14,6 @@ from handle_keys import initialize_fov
 
 
 def new_game():
-
     fighter_component = Fighter(hp=30, defense=2, power=5,
                                 xp=0, death_function=player_death)
     settings.player = Object(0, 0, '@', 'player', libtcod.white, blocks=True,
@@ -26,7 +25,7 @@ def new_game():
     initialize_fov()
 
     settings.game_state = 'playing'
-    inventory = []
+    settings.inventory = []
 
     settings.game_msgs = []
 
@@ -36,7 +35,7 @@ def new_game():
     equipment_component = Equipment(slot='right hand', power_bonus=2)
     obj = Object(0, 0, '-', 'dagger', libtcod.sky,
                  equipment=equipment_component)
-    inventory.append(obj)
+    settings.inventory.append(obj)
     equipment_component.equip()
     obj.always_visible = True
 

@@ -4,38 +4,45 @@ from Menu import inventory_menu
 from Menu import msgbox
 from message import message
 from Map import make_map
-from settings import key
 
 
 def handle_keys():
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
+    if settings.key.vk == libtcod.KEY_ENTER and settings.key.lalt:
         libtcod.console_set_fullscreen(not libtcod.console_is_fullscreen())
 
-    elif key.vk == libtcod.KEY_ESCAPE:
+    elif settings.key.vk == libtcod.KEY_ESCAPE:
         return 'exit'
 
     if settings.game_state == 'playing':
-        if key.vk == libtcod.KEY_UP or key.vk == libtcod.KEY_KP8:
+        if settings.key.vk == libtcod.KEY_UP or \
+                settings.key.vk == libtcod.KEY_KP8:
             player_move_or_attack(0, -1)
-        elif key.vk == libtcod.KEY_DOWN or key.vk == libtcod.KEY_KP2:
+        elif settings.key.vk == libtcod.KEY_DOWN or \
+                settings.key.vk == libtcod.KEY_KP2:
             player_move_or_attack(0, 1)
-        elif key.vk == libtcod.KEY_LEFT or key.vk == libtcod.KEY_KP4:
+        elif settings.key.vk == libtcod.KEY_LEFT or \
+                settings.key.vk == libtcod.KEY_KP4:
             player_move_or_attack(-1, 0)
-        elif key.vk == libtcod.KEY_RIGHT or key.vk == libtcod.KEY_KP6:
+        elif settings.key.vk == libtcod.KEY_RIGHT or \
+                settings.key.vk == libtcod.KEY_KP6:
             player_move_or_attack(1, 0)
-        elif key.vk == libtcod.KEY_HOME or key.vk == libtcod.KEY_KP7:
+        elif settings.key.vk == libtcod.KEY_HOME or \
+                settings.key.vk == libtcod.KEY_KP7:
             player_move_or_attack(-1, -1)
-        elif key.vk == libtcod.KEY_PAGEUP or key.vk == libtcod.KEY_KP9:
+        elif settings.key.vk == libtcod.KEY_PAGEUP or \
+                settings.key.vk == libtcod.KEY_KP9:
             player_move_or_attack(1, -1)
-        elif key.vk == libtcod.KEY_END or key.vk == libtcod.KEY_KP1:
+        elif settings.key.vk == libtcod.KEY_END or \
+                settings.key.vk == libtcod.KEY_KP1:
             player_move_or_attack(-1, 1)
-        elif key.vk == libtcod.KEY_PAGEDOWN or key.vk == libtcod.KEY_KP3:
+        elif settings.key.vk == libtcod.KEY_PAGEDOWN or \
+                settings.key.vk == libtcod.KEY_KP3:
             player_move_or_attack(1, 1)
-        elif key.vk == libtcod.KEY_KP5:
+        elif settings.key.vk == libtcod.KEY_KP5:
             pass
 
         else:
-            key_char = chr(key.c)
+            key_char = chr(settings.key.c)
 
             if key_char == 'g':
                 for object in settings.objects:
