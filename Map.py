@@ -1,13 +1,14 @@
 import libtcodpy as libtcod
 import settings
-import Item
+import spells
+from Item import Item
 from Tile import Tile
 from Rect import Rect
 from Object import Object
 from Object import is_blocked
 from Fighter import Fighter
-from Fighter import monster_death
 from Equipment import Equipment
+from message import message
 from AI import BasicMonster
 
 
@@ -134,19 +135,19 @@ def place_objects(room):
         if not is_blocked(x, y):
             choice = random_choice(item_chances)
             if choice == 'heal':
-                item_component = Item.Item(use_function=Item.cast_heal)
+                item_component = Item(use_function=spells.cast_heal)
                 item = Object(x, y, '!', 'healing potion',
                               libtcod.violet, item=item_component)
             elif choice == 'lightning':
-                item_component = Item.Item(use_function=Item.cast_lightning)
+                item_component = Item(use_function=spells.cast_lightning)
                 item = Object(x, y, '#', 'scroll of lightning bolt',
                               libtcod.light_yellow, item=item_component)
             elif choice == 'fireball':
-                item_component = Item.Item(use_function=Item.cast_fireball)
+                item_component = Item(use_function=spells.cast_fireball)
                 item = Object(x, y, '#', 'scroll of fireball',
                               libtcod.light_yellow, item=item_component)
             elif choice == 'confuse':
-                item_component = Item.Item(use_function=Item.cast_confuse)
+                item_component = Item(use_function=spells.cast_confuse)
                 item = Object(x, y, '#', 'scroll of confusion',
                               libtcod.light_yellow, item=item_component)
             elif choice == 'sword':
@@ -162,13 +163,6 @@ def place_objects(room):
             settings.objects.append(item)
             item.send_to_back()
             item.always_visible = True
-
-
-def from_dungeon_level(table):
-    for (value, level) in reversed(table):
-        if settings.dungeon_level >= level:
-            return value
-    return 0
 
 
 def random_choice(chances_dict):
@@ -189,3 +183,23 @@ def random_choice_index(chances):
         if dice <= running_sum:
             return choice
         choice += 1
+
+
+def from_dungeon_level(table):
+    for (value, level) in reversed(table):
+        if settings.dungeon_level >= level:
+            return value
+    return 0
+
+
+def monster_death(monster):
+    message('The ' + monster.name + ' is dead. You gain ' +
+            str(monster.fighter.xp) + ' experiance points.',
+            libtcod.orange)
+    monster.char = '%'
+    monster.color = libtcod.dark_red
+    monster.blocks = False
+    monster.fighter = None
+    monster.ai = None
+    monster.name = 'remains of ' + monster.name
+    monster.send_to_back()
