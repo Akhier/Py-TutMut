@@ -8,3 +8,6 @@ __pycache__
 
 #game
 *.save
+
+#other
+*.~lock*

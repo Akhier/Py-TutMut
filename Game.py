@@ -3,7 +3,6 @@ import shelve
 import settings
 from Object import Object
 from Fighter import Fighter
-from Fighter import player_death
 from Map import make_map
 from message import message
 from Equipment import Equipment
@@ -125,3 +124,12 @@ def check_level_up():
             settings.player.fighter.power += 1
         elif choice == 2:
             settings.player.fighter.defense += 1
+
+
+def player_death(player):
+    global game_state
+    print('you died.')
+    game_state = 'dead'
+
+    settings.player.char = '%'
+    settings.player.color = libtcod.dark_red

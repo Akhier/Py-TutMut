@@ -1,7 +1,4 @@
-import libtcodpy as libtcod
 import settings
-from message import message
-from Equipment import get_all_equipped
 
 
 class Fighter:
@@ -59,23 +56,12 @@ class Fighter:
             self.hp = self.max_hp
 
 
-def player_death(player):
-    global game_state
-    print('you died.')
-    game_state = 'dead'
-
-    settings.player.char = '%'
-    settings.player.color = libtcod.dark_red
-
-
-def monster_death(monster):
-    message('The ' + monster.name + ' is dead. You gain ' +
-            str(monster.fighter.xp) + ' experiance points.',
-            libtcod.orange)
-    monster.char = '%'
-    monster.color = libtcod.dark_red
-    monster.blocks = False
-    monster.fighter = None
-    monster.ai = None
-    monster.name = 'remains of ' + monster.name
-    monster.send_to_back()
+def get_all_equipped(obj):
+    if obj == settings.player:
+        equipped_list = []
+        for item in settings.inventory:
+            if item.equipment and item.equipment.is_equipped:
+                equipped_list.append(item.equipment)
+        return equipped_list
+    else:
+        return []

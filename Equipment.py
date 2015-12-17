@@ -40,14 +40,3 @@ def get_equipped_in_slot(slot):
         if (obj.equipment and obj.equipment.slot == slot and
                 obj.equipment.is_equipped):
             return obj.equipment
-
-
-def get_all_equipped(obj):
-    if obj == settings.player:
-        equipped_list = []
-        for item in settings.inventory:
-            if item.equipment and item.equipment.is_equipped:
-                equipped_list.append(item.equipment)
-        return equipped_list
-    else:
-        return []
