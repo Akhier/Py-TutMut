@@ -1,15 +1,14 @@
 import libtcodpy as libtcod
-import shelve
+import handle_keys
 import settings
-from Object import Object
-from Fighter import Fighter
-from Map import make_map
-from message import message
-from Equipment import Equipment
+import shelve
 from render_all import render_all
+from Equipment import Equipment
+from Fighter import Fighter
+from message import message
+from Object import Object
+from Map import make_map
 from Menu import menu
-from handle_keys import handle_keys
-from handle_keys import initialize_fov
 
 
 def new_game():
@@ -21,16 +20,13 @@ def new_game():
     settings.player.level = 1
     settings.dungeon_level = 1
     make_map()
-    initialize_fov()
-
+    handle_keys.initialize_fov()
     settings.game_state = 'playing'
     settings.inventory = []
-
     settings.game_msgs = []
 
     message('Welcome stranger. Prepare to perish in the ' +
             'Tombs of the Ancient Kings.', libtcod.red)
-
     equipment_component = Equipment(slot='right hand', power_bonus=2)
     obj = Object(0, 0, '-', 'dagger', libtcod.sky,
                  equipment=equipment_component)
@@ -41,7 +37,6 @@ def new_game():
 
 def play_game():
     settings.player_action = None
-
     settings.mouse = libtcod.Mouse()
     settings.key = libtcod.Key()
     while not libtcod.console_is_window_closed():
@@ -49,15 +44,13 @@ def play_game():
                                     libtcod.EVENT_MOUSE,
                                     settings.key, settings.mouse)
         render_all()
-
         libtcod.console_flush()
-
         check_level_up()
 
         for object in settings.objects:
             object.clear()
 
-        settings.player_action = handle_keys()
+        settings.player_action = handle_keys.handle_keys()
         if settings.player_action == 'exit':
             save_game()
             break
@@ -80,8 +73,7 @@ def load_game():
     settings.stairs = settings.objects[file['stairs_index']]
     settings.dungeon_level = file['dungeon_level']
     file.close()
-
-    initialize_fov()
+    handle_keys.initialize_fov()
 
 
 def save_game():
@@ -127,9 +119,7 @@ def check_level_up():
 
 
 def player_death(player):
-    global game_state
     print('you died.')
-    game_state = 'dead'
-
+    settings.game_state = 'dead'
     settings.player.char = '%'
     settings.player.color = libtcod.dark_red

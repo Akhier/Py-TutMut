@@ -1,6 +1,6 @@
 import libtcodpy as libtcod
-import Game
 import settings
+import Game
 from menu import menu
 settings.init()
 
