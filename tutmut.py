@@ -1,6 +1,7 @@
 import libtcodpy as libtcod
 import settings
 import Game
+from load_game import load_game
 from menu import menu
 settings.init()
 
@@ -29,7 +30,7 @@ if __name__ == '__main__':
             Game.play_game()
         if choice == 1:
             try:
-                Game.load_game()
+                load_game()
             except:
                 menu('\n No saved game to load. \n', [], 24)
                 continue

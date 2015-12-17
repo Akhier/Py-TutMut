@@ -1,38 +1,10 @@
 import libtcodpy as libtcod
-import handle_keys
 import settings
 import shelve
+from handle_keys import handle_keys
 from render_all import render_all
-from Equipment import Equipment
-from Fighter import Fighter
 from message import message
-from Object import Object
-from Map import make_map
-from Menu import menu
-
-
-def new_game():
-    fighter_component = Fighter(hp=30, defense=2, power=5,
-                                xp=0, death_function=player_death)
-    settings.player = Object(0, 0, '@', 'player', libtcod.white, blocks=True,
-                             fighter=fighter_component)
-
-    settings.player.level = 1
-    settings.dungeon_level = 1
-    make_map()
-    handle_keys.initialize_fov()
-    settings.game_state = 'playing'
-    settings.inventory = []
-    settings.game_msgs = []
-
-    message('Welcome stranger. Prepare to perish in the ' +
-            'Tombs of the Ancient Kings.', libtcod.red)
-    equipment_component = Equipment(slot='right hand', power_bonus=2)
-    obj = Object(0, 0, '-', 'dagger', libtcod.sky,
-                 equipment=equipment_component)
-    settings.inventory.append(obj)
-    equipment_component.equip()
-    obj.always_visible = True
+from menu import menu
 
 
 def play_game():
@@ -50,7 +22,7 @@ def play_game():
         for object in settings.objects:
             object.clear()
 
-        settings.player_action = handle_keys.handle_keys()
+        settings.player_action = handle_keys()
         if settings.player_action == 'exit':
             save_game()
             break
@@ -60,33 +32,6 @@ def play_game():
             for object in settings.objects:
                 if object.ai:
                     object.ai.take_turn()
-
-
-def load_game():
-    file = shelve.open('savegame.save', 'r')
-    settings.map = file['map']
-    settings.objects = file['objects']
-    settings.player = settings.objects[file['player_index']]
-    settings.inventory = file['inventory']
-    settings.game_msgs = file['game_msgs']
-    settings.game_state = file['game_state']
-    settings.stairs = settings.objects[file['stairs_index']]
-    settings.dungeon_level = file['dungeon_level']
-    file.close()
-    handle_keys.initialize_fov()
-
-
-def save_game():
-    file = shelve.open('savegame.save', 'n')
-    file['map'] = settings.map
-    file['objects'] = settings.objects
-    file['player_index'] = settings.objects.index(settings.player)
-    file['inventory'] = settings.inventory
-    file['game_msgs'] = settings.game_msgs
-    file['game_state'] = settings.game_state
-    file['stairs_index'] = settings.objects.index(settings.stairs)
-    file['dungeon_level'] = settings.dungeon_level
-    file.close()
 
 
 def check_level_up():
@@ -118,8 +63,14 @@ def check_level_up():
             settings.player.fighter.defense += 1
 
 
-def player_death(player):
-    print('you died.')
-    settings.game_state = 'dead'
-    settings.player.char = '%'
-    settings.player.color = libtcod.dark_red
+def save_game():
+    file = shelve.open('savegame.save', 'n')
+    file['map'] = settings.map
+    file['objects'] = settings.objects
+    file['player_index'] = settings.objects.index(settings.player)
+    file['inventory'] = settings.inventory
+    file['game_msgs'] = settings.game_msgs
+    file['game_state'] = settings.game_state
+    file['stairs_index'] = settings.objects.index(settings.stairs)
+    file['dungeon_level'] = settings.dungeon_level
+    file.close()

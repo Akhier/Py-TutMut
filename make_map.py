@@ -8,10 +8,8 @@ from Rect import Rect
 
 def make_map():
     settings.objects = [settings.player]
-
     settings.map = [[Tile(True) for y in range(settings.MAP_HEIGHT)]
                     for x in range(settings.MAP_WIDTH)]
-
     rooms = []
     num_rooms = 0
 
@@ -24,7 +22,6 @@ def make_map():
         y = libtcod.random_get_int(0, 0, settings.MAP_HEIGHT - h - 1)
 
         new_room = Rect(x, y, w, h)
-
         failed = False
         for other_room in rooms:
             if new_room.intersect(other_room):

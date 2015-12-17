@@ -1,8 +1,8 @@
 import libtcodpy as libtcod
 import settings
-from Menu import menu
+from make_map import make_map
 from message import message
-from Map import make_map
+from menu import menu
 
 
 def handle_keys():

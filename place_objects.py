@@ -1,12 +1,11 @@
 import libtcodpy as libtcod
 import settings
+import Object
 import spells
 from Equipment import Equipment
-from Object import is_blocked
 from Fighter import Fighter
 from message import message
 from AI import BasicMonster
-from Object import Object
 from Item import Item
 
 
@@ -33,24 +32,26 @@ def place_objects(room):
         x = libtcod.random_get_int(0, room.x1 + 1, room.x2 - 1)
         y = libtcod.random_get_int(0, room.y1 + 1, room.y2 - 1)
 
-        if not is_blocked(x, y):
+        if not Object.is_blocked(x, y):
             choice = random_choice(monster_chances)
             if choice == 'orc':
                 fighter_component = Fighter(hp=10, defense=0, power=3, xp=35,
                                             death_function=monster_death)
                 ai_component = BasicMonster()
 
-                monster = Object(x, y, 'o', 'orc', libtcod.desaturated_green,
-                                 blocks=True, fighter=fighter_component,
-                                 ai=ai_component)
+                monster = Object.Object(x, y, 'o', 'orc',
+                                        libtcod.desaturated_green,
+                                        blocks=True, fighter=fighter_component,
+                                        ai=ai_component)
             elif choice == 'troll':
                 fighter_component = Fighter(hp=16, defense=1, power=4, xp=100,
                                             death_function=monster_death)
                 ai_component = BasicMonster()
 
-                monster = Object(x, y, 'T', 'troll', libtcod.darker_green,
-                                 blocks=True, fighter=fighter_component,
-                                 ai=ai_component)
+                monster = Object.Object(x, y, 'T', 'troll',
+                                        libtcod.darker_green,
+                                        blocks=True, fighter=fighter_component,
+                                        ai=ai_component)
 
             settings.objects.append(monster)
 
@@ -60,34 +61,35 @@ def place_objects(room):
         x = libtcod.random_get_int(0, room.x1 + 1, room.x2 - 1)
         y = libtcod.random_get_int(0, room.y1 + 1, room.y2 - 1)
 
-        if not is_blocked(x, y):
+        if not Object.is_blocked(x, y):
             choice = random_choice(item_chances)
             if choice == 'heal':
                 item_component = Item(use_function=spells.cast_heal)
-                item = Object(x, y, '!', 'healing potion',
-                              libtcod.violet, item=item_component)
+                item = Object.Object(x, y, '!', 'healing potion',
+                                     libtcod.violet, item=item_component)
             elif choice == 'lightning':
                 item_component = Item(use_function=spells.cast_lightning)
-                item = Object(x, y, '#', 'scroll of lightning bolt',
-                              libtcod.light_yellow, item=item_component)
+                item = Object.Object(x, y, '#', 'scroll of lightning bolt',
+                                     libtcod.light_yellow, item=item_component)
             elif choice == 'fireball':
                 item_component = Item(use_function=spells.cast_fireball)
-                item = Object(x, y, '#', 'scroll of fireball',
-                              libtcod.light_yellow, item=item_component)
+                item = Object.Object(x, y, '#', 'scroll of fireball',
+                                     libtcod.light_yellow, item=item_component)
             elif choice == 'confuse':
                 item_component = Item(use_function=spells.cast_confuse)
-                item = Object(x, y, '#', 'scroll of confusion',
-                              libtcod.light_yellow, item=item_component)
+                item = Object.Object(x, y, '#', 'scroll of confusion',
+                                     libtcod.light_yellow, item=item_component)
             elif choice == 'sword':
                 equipment_component = Equipment(slot='right hand',
                                                 power_bonus=3)
-                item = Object(x, y, '/', 'sword', libtcod.sky,
-                              equipment=equipment_component)
+                item = Object.Object(x, y, '/', 'sword', libtcod.sky,
+                                     equipment=equipment_component)
             elif choice == 'shield':
                 equipment_component = Equipment(slot='right hand',
                                                 defense_bonus=1)
-                item = Object(x, y, '[', 'shield', libtcod.darker_orange,
-                              equipment=equipment_component)
+                item = Object.Object(x, y, '[', 'shield',
+                                     libtcod.darker_orange,
+                                     equipment=equipment_component)
             settings.objects.append(item)
             item.send_to_back()
             item.always_visible = True
