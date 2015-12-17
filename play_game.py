@@ -1,8 +1,8 @@
 import libtcodpy as libtcod
 import settings
-import shelve
 from handle_keys import handle_keys
 from render_all import render_all
+from save_game import save_game
 from message import message
 from menu import menu
 
@@ -61,16 +61,3 @@ def check_level_up():
             settings.player.fighter.power += 1
         elif choice == 2:
             settings.player.fighter.defense += 1
-
-
-def save_game():
-    file = shelve.open('savegame.save', 'n')
-    file['map'] = settings.map
-    file['objects'] = settings.objects
-    file['player_index'] = settings.objects.index(settings.player)
-    file['inventory'] = settings.inventory
-    file['game_msgs'] = settings.game_msgs
-    file['game_state'] = settings.game_state
-    file['stairs_index'] = settings.objects.index(settings.stairs)
-    file['dungeon_level'] = settings.dungeon_level
-    file.close()
