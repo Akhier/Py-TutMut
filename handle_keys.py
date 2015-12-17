@@ -1,7 +1,6 @@
 import libtcodpy as libtcod
 import settings
-from Menu import inventory_menu
-from Menu import msgbox
+from Menu import menu
 from message import message
 from Map import make_map
 
@@ -126,3 +125,25 @@ def player_move_or_attack(dx, dy):
     else:
         settings.player.move(dx, dy)
         settings.fov_recompute = True
+
+
+def msgbox(text, width=50):
+    menu(text, [], width)
+
+
+def inventory_menu(header):
+    if len(settings.inventory) == 0:
+        options = ['Inventory is empty.']
+    else:
+        options = []
+        for item in settings.inventory:
+            text = item.name
+            if item.equipment and item.equipment.is_equipped:
+                text = text + ' (on ' + item.equipment.slot + ')'
+            options.append(text)
+
+    index = menu(header, options, settings.INVENTORY_WIDTH)
+
+    if index is None or len(settings.inventory) == 0:
+        return None
+    return settings.inventory[index].item
