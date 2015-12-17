@@ -6,7 +6,7 @@ from Fighter import Fighter
 from Map import make_map
 from message import message
 from Equipment import Equipment
-from render import render_all
+from render_all import render_all
 from Menu import menu
 from handle_keys import handle_keys
 from handle_keys import initialize_fov
