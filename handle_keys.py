@@ -1,5 +1,6 @@
 import libtcodpy as libtcod
 import settings
+import color
 from make_map import make_map
 from message import message
 from menu import menu
@@ -87,12 +88,12 @@ def handle_keys():
 
 def next_level():
     message('You take a moment to rest, and recover your strength',
-            libtcod.light_violet)
+            color.light_violet)
     settings.player.fighter.heal(settings.player.fighter.max_hp / 2)
 
     settings.dungeon_level += 1
     message('After a rare moment of peace, you descend deeper into ' +
-            'the heart of the dungeon...', libtcod.red)
+            'the heart of the dungeon...', color.red)
     make_map()
     initialize_fov()
 

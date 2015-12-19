@@ -1,5 +1,6 @@
 import libtcodpy as libtcod
 import settings
+import color
 import math
 from Item import Item
 
@@ -72,8 +73,8 @@ class Object:
     def clear(self):
         if libtcod.map_is_in_fov(settings.fov_map, self.x, self.y):
             libtcod.console_put_char_ex(settings.con, self.x, self.y,
-                                        '.', libtcod.white,
-                                        settings.color_light_ground)
+                                        '.', color.white,
+                                        color.light_ground)
 
 
 def is_blocked(x, y):

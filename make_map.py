@@ -1,5 +1,6 @@
 import libtcodpy as libtcod
 import settings
+import color
 from place_objects import place_objects
 from Object import Object
 from Tile import Tile
@@ -49,7 +50,7 @@ def make_map():
             num_rooms += 1
 
     settings.stairs = Object(new_x, new_y, '<', 'stairs',
-                             libtcod.white, always_visible=True)
+                             color.white, always_visible=True)
     settings.objects.append(settings.stairs)
     settings.stairs.send_to_back()
 

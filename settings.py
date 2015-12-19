@@ -1,4 +1,5 @@
 import libtcodpy as libtcod
+import color
 from Tile import Tile
 from Object import Object
 
@@ -39,11 +40,6 @@ TORCH_RADIUS = 10
 
 LIMIT_FPS = 20
 
-color_dark_wall = libtcod.Color(0, 0, 100)
-color_light_wall = libtcod.Color(130, 110, 50)
-color_dark_ground = libtcod.Color(50, 50, 150)
-color_light_ground = libtcod.Color(200, 180, 50)
-
 con = libtcod.console_new(SCREEN_WIDTH, SCREEN_HEIGHT)
 panel = libtcod.console_new(SCREEN_WIDTH, PANEL_HEIGHT)
 
@@ -58,8 +54,8 @@ map = [[Tile(True) for y in range(MAP_HEIGHT)]
        for x in range(MAP_WIDTH)]
 mouse = libtcod.Mouse()
 objects = []
-player = Object(0, 0, '@', 'player', libtcod.white)
-stairs = Object(0, 0, '<', 'stairs', libtcod.white)
+player = Object(0, 0, '@', 'player', color.white)
+stairs = Object(0, 0, '<', 'stairs', color.white)
 
 
 def init():

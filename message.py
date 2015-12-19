@@ -1,9 +1,9 @@
-import libtcodpy as libtcod
 import textwrap
 import settings
+import color
 
 
-def message(new_msg, color=libtcod.white):
+def message(new_msg, color=color.white):
     new_msg_lines = textwrap.wrap(new_msg, settings.MSG_WIDTH)
 
     for line in new_msg_lines:

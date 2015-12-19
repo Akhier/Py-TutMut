@@ -1,5 +1,6 @@
 import libtcodpy as libtcod
 import settings
+import color
 from handle_keys import handle_keys
 from render_all import render_all
 from save_game import save_game
@@ -41,7 +42,7 @@ def check_level_up():
         settings.player.level += 1
         settings.player.fighter.xp -= level_up_xp
         message('Your battle skills grow stronger. You reached level ' +
-                str(settings.player.level) + '.', libtcod.yellow)
+                str(settings.player.level) + '.', color.yellow)
 
         choice = None
         while choice is None:

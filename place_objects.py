@@ -2,6 +2,7 @@ import libtcodpy as libtcod
 import settings
 import Object
 import spells
+import color
 from Equipment import Equipment
 from Fighter import Fighter
 from message import message
@@ -40,7 +41,7 @@ def place_objects(room):
                 ai_component = BasicMonster()
 
                 monster = Object.Object(x, y, 'o', 'orc',
-                                        libtcod.desaturated_green,
+                                        color.desaturated_green,
                                         blocks=True, fighter=fighter_component,
                                         ai=ai_component)
             elif choice == 'troll':
@@ -49,7 +50,7 @@ def place_objects(room):
                 ai_component = BasicMonster()
 
                 monster = Object.Object(x, y, 'T', 'troll',
-                                        libtcod.darker_green,
+                                        color.darker_green,
                                         blocks=True, fighter=fighter_component,
                                         ai=ai_component)
 
@@ -66,29 +67,29 @@ def place_objects(room):
             if choice == 'heal':
                 item_component = Item(use_function=spells.cast_heal)
                 item = Object.Object(x, y, '!', 'healing potion',
-                                     libtcod.violet, item=item_component)
+                                     color.violet, item=item_component)
             elif choice == 'lightning':
                 item_component = Item(use_function=spells.cast_lightning)
                 item = Object.Object(x, y, '#', 'scroll of lightning bolt',
-                                     libtcod.light_yellow, item=item_component)
+                                     color.light_yellow, item=item_component)
             elif choice == 'fireball':
                 item_component = Item(use_function=spells.cast_fireball)
                 item = Object.Object(x, y, '#', 'scroll of fireball',
-                                     libtcod.light_yellow, item=item_component)
+                                     color.light_yellow, item=item_component)
             elif choice == 'confuse':
                 item_component = Item(use_function=spells.cast_confuse)
                 item = Object.Object(x, y, '#', 'scroll of confusion',
-                                     libtcod.light_yellow, item=item_component)
+                                     color.light_yellow, item=item_component)
             elif choice == 'sword':
                 equipment_component = Equipment(slot='right hand',
                                                 power_bonus=3)
-                item = Object.Object(x, y, '/', 'sword', libtcod.sky,
+                item = Object.Object(x, y, '/', 'sword', color.sky,
                                      equipment=equipment_component)
             elif choice == 'shield':
                 equipment_component = Equipment(slot='right hand',
                                                 defense_bonus=1)
                 item = Object.Object(x, y, '[', 'shield',
-                                     libtcod.darker_orange,
+                                     color.darker_orange,
                                      equipment=equipment_component)
             settings.objects.append(item)
             item.send_to_back()
@@ -125,9 +126,9 @@ def from_dungeon_level(table):
 def monster_death(monster):
     message('The ' + monster.name + ' is dead. You gain ' +
             str(monster.fighter.xp) + ' experiance points.',
-            libtcod.orange)
+            color.orange)
     monster.char = '%'
-    monster.color = libtcod.dark_red
+    monster.color = color.dark_red
     monster.blocks = False
     monster.fighter = None
     monster.ai = None

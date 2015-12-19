@@ -1,5 +1,6 @@
 import libtcodpy as libtcod
 import settings
+import color
 
 
 def render_all():
@@ -17,22 +18,22 @@ def render_all():
                         if wall:
                             libtcod.console_put_char_ex(settings.con,
                                                         x, y, '#',
-                                                        libtcod.white,
-                                                        settings.color_dark_wall)
+                                                        color.white,
+                                                        color.dark_wall)
                         else:
                             libtcod.console_put_char_ex(settings.con,
                                                         x, y, '.',
-                                                        libtcod.white,
-                                                        settings.color_dark_ground)
+                                                        color.white,
+                                                        color.dark_ground)
                 else:
                     if wall:
                         libtcod.console_put_char_ex(settings.con, x, y, '#',
-                                                    libtcod.white,
-                                                    settings.color_light_wall)
+                                                    color.white,
+                                                    color.light_wall)
                     else:
                         libtcod.console_put_char_ex(settings.con, x, y, '.',
-                                                    libtcod.white,
-                                                    settings.color_light_ground)
+                                                    color.white,
+                                                    color.light_ground)
                     settings.map[x][y].explored = True
 
     for object in settings.objects:
@@ -43,31 +44,31 @@ def render_all():
     libtcod.console_blit(settings.con, 0, 0, settings.SCREEN_WIDTH,
                          settings.SCREEN_HEIGHT, 0, 0, 0)
 
-    libtcod.console_set_default_background(settings.panel, libtcod.black)
+    libtcod.console_set_default_background(settings.panel, color.black)
     libtcod.console_clear(settings.panel)
 
     y = 1
-    for (line, color) in settings.game_msgs:
-        libtcod.console_set_default_foreground(settings.panel, color)
+    for (line, msgcolor) in settings.game_msgs:
+        libtcod.console_set_default_foreground(settings.panel, msgcolor)
         libtcod.console_print_ex(settings.panel, settings.MSG_X,
                                  y, libtcod.BKGND_NONE,
                                  libtcod.LEFT, line)
         y += 1
 
     render_bar(1, 1, settings.BAR_WIDTH, 'HP', settings.player.fighter.hp,
-               settings.player.fighter.max_hp, libtcod.light_red,
-               libtcod.darker_red)
+               settings.player.fighter.max_hp, color.light_red,
+               color.darker_red)
     libtcod.console_print_ex(settings.panel, 1, 3, libtcod.BKGND_NONE,
                              libtcod.LEFT, 'Dungeon level ' +
                              str(settings.dungeon_level))
 
-    libtcod.console_set_default_foreground(settings.con, libtcod.white)
+    libtcod.console_set_default_foreground(settings.con, color.white)
     libtcod.console_print_ex(0, 1, settings.SCREEN_HEIGHT - 2,
                              libtcod.BKGND_NONE, libtcod.LEFT, 'HP: ' +
                              str(settings.player.fighter.hp) +
                              '/' + str(settings.player.fighter.max_hp))
 
-    libtcod.console_set_default_foreground(settings.panel, libtcod.light_gray)
+    libtcod.console_set_default_foreground(settings.panel, color.light_gray)
     libtcod.console_print_ex(settings.panel, 1, 0, libtcod.BKGND_NONE,
                              libtcod.LEFT, get_name_under_mouse())
 
@@ -87,7 +88,7 @@ def render_bar(x, y, total_width, name, value, maximum, bar_color, back_color):
         libtcod.console_rect(settings.panel, x, y, bar_width, 1,
                              False, libtcod.BKGND_SCREEN)
 
-    libtcod.console_set_default_foreground(settings.panel, libtcod.white)
+    libtcod.console_set_default_foreground(settings.panel, color.white)
     libtcod.console_print_ex(settings.panel, x + total_width / 2, y,
                              libtcod.BKGND_NONE, libtcod.CENTER,
                              name + ': ' + str(value) + '/' + str(maximum))

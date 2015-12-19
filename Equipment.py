@@ -1,4 +1,4 @@
-import libtcodpy as libtcod
+import color
 import settings
 from message import message
 
@@ -25,14 +25,14 @@ class Equipment:
 
         self.is_equipped = True
         message('Equipped ' + self.owner.name + ' on ' +
-                self.slot + '.', libtcod.light_green)
+                self.slot + '.', color.light_green)
 
     def dequip(self):
         if not self.is_equipped:
             return
         self.is_equipped = False
         message('Dequipped ' + self.owner.name + ' from ' +
-                self.slot + '.', libtcod.yellow)
+                self.slot + '.', color.yellow)
 
 
 def get_equipped_in_slot(slot):

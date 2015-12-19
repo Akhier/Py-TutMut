@@ -1,5 +1,6 @@
 import libtcodpy as libtcod
 import settings
+import color
 
 
 def menu(header, options, width):
@@ -15,7 +16,7 @@ def menu(header, options, width):
 
     window = libtcod.console_new(width, height)
 
-    libtcod.console_set_default_foreground(window, libtcod.white)
+    libtcod.console_set_default_foreground(window, color.white)
     libtcod.console_print_rect_ex(window, 0, 0, width, height,
                                   libtcod.BKGND_NONE, libtcod.LEFT, header)
 
