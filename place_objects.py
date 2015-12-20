@@ -1,4 +1,3 @@
-import libtcodpy as libtcod
 import settings
 import Object
 import spells
@@ -27,11 +26,11 @@ def place_objects(room):
     item_chances['sword'] = from_dungeon_level([[5, 4]])
     item_chances['shield'] = from_dungeon_level([[15, 8]])
 
-    num_monsters = libtcod.random_get_int(0, 0, max_monster)
+    num_monsters = settings.RNG.get_int(0, max_monster)
 
     for i in range(num_monsters):
-        x = libtcod.random_get_int(0, room.x1 + 1, room.x2 - 1)
-        y = libtcod.random_get_int(0, room.y1 + 1, room.y2 - 1)
+        x = settings.RNG.get_int(room.x1 + 1, room.x2 - 1)
+        y = settings.RNG.get_int(room.y1 + 1, room.y2 - 1)
 
         if not Object.is_blocked(x, y):
             choice = random_choice(monster_chances)
@@ -56,11 +55,11 @@ def place_objects(room):
 
             settings.objects.append(monster)
 
-    num_items = libtcod.random_get_int(0, 0, max_items)
+    num_items = settings.RNG.get_int(0, max_items)
 
     for i in range(num_items):
-        x = libtcod.random_get_int(0, room.x1 + 1, room.x2 - 1)
-        y = libtcod.random_get_int(0, room.y1 + 1, room.y2 - 1)
+        x = settings.RNG.get_int(room.x1 + 1, room.x2 - 1)
+        y = settings.RNG.get_int(room.y1 + 1, room.y2 - 1)
 
         if not Object.is_blocked(x, y):
             choice = random_choice(item_chances)
@@ -104,7 +103,7 @@ def random_choice(chances_dict):
 
 
 def random_choice_index(chances):
-    dice = libtcod.random_get_int(0, 1, sum(chances))
+    dice = settings.RNG.get_int(1, sum(chances))
 
     running_sum = 0
     choice = 0

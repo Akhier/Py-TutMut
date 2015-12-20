@@ -1,7 +1,8 @@
 import libtcodpy as libtcod
 import color
-from Tile import Tile
 from Object import Object
+from Tile import Tile
+from rng import rng
 
 SCREEN_WIDTH = 80
 SCREEN_HEIGHT = 50
@@ -56,6 +57,8 @@ mouse = libtcod.Mouse()
 objects = []
 player = Object(0, 0, '@', 'player', color.white)
 stairs = Object(0, 0, '<', 'stairs', color.white)
+
+RNG = rng()
 
 
 def init():

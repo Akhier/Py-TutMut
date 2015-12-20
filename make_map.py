@@ -1,4 +1,3 @@
-import libtcodpy as libtcod
 import settings
 import color
 from place_objects import place_objects
@@ -15,12 +14,12 @@ def make_map():
     num_rooms = 0
 
     for r in range(settings.MAX_ROOMS):
-        w = libtcod.random_get_int(0, settings.ROOM_MIN_SIZE,
-                                   settings.ROOM_MAX_SIZE)
-        h = libtcod.random_get_int(0, settings.ROOM_MIN_SIZE,
-                                   settings.ROOM_MAX_SIZE)
-        x = libtcod.random_get_int(0, 0, settings.MAP_WIDTH - w - 1)
-        y = libtcod.random_get_int(0, 0, settings.MAP_HEIGHT - h - 1)
+        w = settings.RNG.get_int(settings.ROOM_MIN_SIZE,
+                                 settings.ROOM_MAX_SIZE)
+        h = settings.RNG.get_int(settings.ROOM_MIN_SIZE,
+                                 settings.ROOM_MAX_SIZE)
+        x = settings.RNG.get_int(0, settings.MAP_WIDTH - w - 1)
+        y = settings.RNG.get_int(0, settings.MAP_HEIGHT - h - 1)
 
         new_room = Rect(x, y, w, h)
         failed = False
@@ -32,14 +31,14 @@ def make_map():
         if not failed:
             create_room(new_room)
             place_objects(new_room)
-            (new_x, new_y) = new_room.center()
+            (new_x, new_y) = new_room.center
 
             if num_rooms == 0:
                 settings.player.x = new_x
                 settings.player.y = new_y
             else:
-                (prev_x, prev_y) = rooms[num_rooms - 1].center()
-                if libtcod.random_get_int(0, 0, 1) == 1:
+                (prev_x, prev_y) = rooms[num_rooms - 1].center
+                if settings.RNG.get_int(0, 1) == 1:
                     create_h_tunnel(prev_x, new_x, prev_y)
                     create_v_tunnel(prev_y, new_y, new_x)
                 else:
