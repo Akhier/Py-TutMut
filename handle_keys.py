@@ -1,8 +1,9 @@
 import libtcodpy as libtcod
 import settings
 import color
-from make_map import make_map
+from map_gen import make_map
 from message import message
+from Rect import Rect
 from menu import menu
 
 
@@ -94,7 +95,16 @@ def next_level():
     settings.dungeon_level += 1
     message('After a rare moment of peace, you descend deeper into ' +
             'the heart of the dungeon...', color.red)
-    make_map()
+    (cx, cy) = Rect(0, 0, settings.MAP_WIDTH, settings.MAP_HEIGHT).center
+    if settings.stairs.x < cx:
+        cx = 0
+    else:
+        cx = 1
+    if settings.stairs.y < cy:
+        cy = 0
+    else:
+        cy = 2
+    make_map(cx + cy)
     initialize_fov()
 
 

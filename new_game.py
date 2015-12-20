@@ -2,7 +2,7 @@ import handle_keys
 import settings
 import color
 from Equipment import Equipment
-from make_map import make_map
+from map_gen import make_map
 from Fighter import Fighter
 from message import message
 from Object import Object

@@ -23,3 +23,11 @@ class Rect:
     def intersect(self, other):
         return (self.x1 <= other.x2 and self.x2 >= other.x1 and
                 self.y1 <= other.y2 and self.y2 >= other.y1)
+
+    def move(self, x, y):
+        self.x1 = x
+        self.y1 = y
+
+    def move_by_center(self, x, y):
+        self.x1 = x - self.w / 2
+        self.y1 = y - self.h / 2
