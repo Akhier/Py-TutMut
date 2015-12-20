@@ -53,6 +53,8 @@ inventory = []
 key = libtcod.Key()
 map = [[Tile(True) for y in range(MAP_HEIGHT)]
        for x in range(MAP_WIDTH)]
+flood_map = [[-1 for y in range(MAP_HEIGHT)]
+             for x in range(MAP_WIDTH)]
 mouse = libtcod.Mouse()
 objects = []
 player = Object(0, 0, '@', 'player', color.white)

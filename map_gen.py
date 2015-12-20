@@ -11,6 +11,8 @@ def make_map(corner=0):
     settings.objects = [settings.player]
     settings.map = [[Tile(True) for y in range(settings.MAP_HEIGHT)]
                     for x in range(settings.MAP_WIDTH)]
+    settings.flood_map = [[-1 for y in range(settings.MAP_HEIGHT)]
+                          for x in range(settings.MAP_WIDTH)]
     rooms = []
     num_rooms = 1
 
@@ -103,7 +105,11 @@ def make_map(corner=0):
                 if backtrack > num_rooms:
                     finished = True
 
-    (cx, cy) = rooms[num_rooms - 1].center
+    (cx, cy) = get_farthest_floor(settings.player.x, settings.player.y)
+    stairs_rect = Rect(cx, cy, 1, 1)
+    for other_room in rooms:
+        if stairs_rect.intersect(other_room):
+            (cx, cy) = other_room.center
     settings.stairs = Object(cx, cy, '<', 'stairs',
                              color.white, always_visible=True)
     settings.objects.append(settings.stairs)
@@ -115,15 +121,52 @@ def create_room(room):
         for y in range(room.y1 + 1, room.y2):
             settings.map[x][y].blocked = False
             settings.map[x][y].block_sight = False
+            settings.flood_map[x][y] = 0
 
 
 def create_h_tunnel(x1, x2, y):
     for x in range(min(x1, x2), max(x1, x2) + 1):
         settings.map[x][y].blocked = False
         settings.map[x][y].block_sight = False
+        settings.flood_map[x][y] = 0
 
 
 def create_v_tunnel(y1, y2, x):
     for y in range(min(y1, y2), max(y1, y2) + 1):
         settings.map[x][y].blocked = False
         settings.map[x][y].block_sight = False
+        settings.flood_map[x][y] = 0
+
+
+def get_farthest_floor(px, py):
+    filling = True
+    far_x = px
+    far_y = py
+    settings.flood_map[px][py] = 1
+    while filling:
+        filling = False
+        for y in range(settings.MAP_HEIGHT):
+            for x in range(settings.MAP_WIDTH):
+                if settings.flood_map[x][y] == 1:
+                    if settings.flood_map[x+1][y] == 0:
+                        settings.flood_map[x+1][y] = 1
+                        filling = True
+                        far_x = x + 1
+                        far_y = y
+                    elif settings.flood_map[x-1][y] == 0:
+                        settings.flood_map[x-1][y] = 1
+                        filling = True
+                        far_x = x - 1
+                        far_y = y
+                    elif settings.flood_map[x][y+1] == 0:
+                        settings.flood_map[x][y+1] = 1
+                        filling = True
+                        far_x = x
+                        far_y = y + 1
+                    elif settings.flood_map[x][y-1] == 0:
+                        settings.flood_map[x][y-1] = 1
+                        filling = True
+                        far_x = x
+                        far_y = y - 1
+
+    return(far_x, far_y)
