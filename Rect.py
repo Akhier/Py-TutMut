@@ -3,9 +3,18 @@ class Rect:
     def __init__(self, x, y, w, h):
         self.x1 = x
         self.y1 = y
-        self.x2 = x + w
-        self.y2 = y + h
+        self.w = w
+        self.h = h
 
+    @property
+    def x2(self):
+        return self.x1 + self.w
+
+    @property
+    def y2(self):
+        return self.y1 + self.h
+
+    @property
     def center(self):
         center_x = (self.x1 + self.x2) / 2
         center_y = (self.y1 + self.y2) / 2
