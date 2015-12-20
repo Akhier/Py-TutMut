@@ -9,7 +9,7 @@ from AI import BasicMonster
 from Item import Item
 
 
-def place_objects(room):
+def place_objects(rect):
     max_monster = from_dungeon_level([[2, 1], [3, 4], [5, 6]])
 
     monster_chances = {}
@@ -29,8 +29,8 @@ def place_objects(room):
     num_monsters = settings.RNG.get_int(0, max_monster)
 
     for i in range(num_monsters):
-        x = settings.RNG.get_int(room.x1 + 1, room.x2 - 1)
-        y = settings.RNG.get_int(room.y1 + 1, room.y2 - 1)
+        x = settings.RNG.get_int(rect.x1 + 1, rect.x2 - 1)
+        y = settings.RNG.get_int(rect.y1 + 1, rect.y2 - 1)
 
         if not Object.is_blocked(x, y):
             choice = random_choice(monster_chances)
@@ -58,8 +58,8 @@ def place_objects(room):
     num_items = settings.RNG.get_int(0, max_items)
 
     for i in range(num_items):
-        x = settings.RNG.get_int(room.x1 + 1, room.x2 - 1)
-        y = settings.RNG.get_int(room.y1 + 1, room.y2 - 1)
+        x = settings.RNG.get_int(rect.x1 + 1, rect.x2 - 1)
+        y = settings.RNG.get_int(rect.y1 + 1, rect.y2 - 1)
 
         if not Object.is_blocked(x, y):
             choice = random_choice(item_chances)
