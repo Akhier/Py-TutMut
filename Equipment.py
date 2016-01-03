@@ -1,6 +1,6 @@
 import color
 import settings
-from message import message
+import message
 
 
 class Equipment:
@@ -24,15 +24,15 @@ class Equipment:
             old_equipment.dequip()
 
         self.is_equipped = True
-        message('Equipped ' + self.owner.name + ' on ' +
-                self.slot + '.', color.light_green)
+        message.message('Equipped ' + self.owner.name + ' on ' +
+                        self.slot + '.', color.light_green)
 
     def dequip(self):
         if not self.is_equipped:
             return
         self.is_equipped = False
-        message('Dequipped ' + self.owner.name + ' from ' +
-                self.slot + '.', color.yellow)
+        message.message('Dequipped ' + self.owner.name + ' from ' +
+                        self.slot + '.', color.yellow)
 
 
 def get_equipped_in_slot(slot):

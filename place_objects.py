@@ -2,10 +2,9 @@ import settings
 import Object
 import spells
 import color
+import copy
+from import_monsters import monsters
 from Equipment import Equipment
-from Fighter import Fighter
-from message import message
-from AI import BasicMonster
 from Item import Item
 
 
@@ -34,25 +33,9 @@ def place_objects(rect):
 
         if not Object.is_blocked(x, y):
             choice = random_choice(monster_chances)
-            if choice == 'orc':
-                fighter_component = Fighter(hp=10, defense=0, power=3, xp=35,
-                                            death_function=monster_death)
-                ai_component = BasicMonster()
-
-                monster = Object.Object(x, y, 'o', 'orc',
-                                        color.desaturated_green,
-                                        blocks=True, fighter=fighter_component,
-                                        ai=ai_component)
-            elif choice == 'troll':
-                fighter_component = Fighter(hp=16, defense=1, power=4, xp=100,
-                                            death_function=monster_death)
-                ai_component = BasicMonster()
-
-                monster = Object.Object(x, y, 'T', 'troll',
-                                        color.darker_green,
-                                        blocks=True, fighter=fighter_component,
-                                        ai=ai_component)
-
+            monster = copy.deepcopy(monsters[choice])
+            monster.x = x
+            monster.y = y
             settings.objects.append(monster)
 
     num_items = settings.RNG.get_int(0, max_items)
@@ -120,16 +103,3 @@ def from_dungeon_level(table):
         if settings.dungeon_level >= level:
             return value
     return 0
-
-
-def monster_death(monster):
-    message('The ' + monster.name + ' is dead. You gain ' +
-            str(monster.fighter.xp) + ' experiance points.',
-            color.orange)
-    monster.char = '%'
-    monster.color = color.dark_red
-    monster.blocks = False
-    monster.fighter = None
-    monster.ai = None
-    monster.name = 'remains of ' + monster.name
-    monster.send_to_back()

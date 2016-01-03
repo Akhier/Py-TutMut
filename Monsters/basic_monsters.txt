@@ -1,0 +1,29 @@
+MONSTERS
+
+{
+[name=orc]
+[char=o]
+[color=desaturated_green]
+[blocks]
+[fighter
+	<hp=10>
+	<def=0>
+	<pow=3>
+	<xp=35>
+	<death=basic_death>]
+[ai=BasicMonster]
+}
+
+{
+[name=troll]
+[char=T]
+[color=darker_green]
+[blocks]
+[fighter
+	<hp=16>
+	<def=1>
+	<pow=4>
+	<xp=100>
+	<death=basic_death>]
+[ai=BasicMonster]
+}
