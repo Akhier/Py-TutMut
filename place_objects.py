@@ -1,11 +1,8 @@
 import settings
 import Object
-import spells
-import color
 import copy
 from import_monsters import monsters
-from Equipment import Equipment
-from Item import Item
+from import_items import items
 
 
 def place_objects(rect):
@@ -19,12 +16,8 @@ def place_objects(rect):
     max_items = from_dungeon_level([[1, 1], [2, 4]])
 
     item_chances = {}
-    item_chances['heal'] = 35
-    item_chances['lightning'] = from_dungeon_level([[25, 4]])
-    item_chances['fireball'] = from_dungeon_level([[25, 6]])
-    item_chances['confuse'] = from_dungeon_level([[10, 2]])
-    item_chances['sword'] = from_dungeon_level([[5, 4]])
-    item_chances['shield'] = from_dungeon_level([[15, 8]])
+    for key in items:
+        item_chances[key] = from_dungeon_level(items[key].placement_range)
 
     num_monsters = settings.RNG.get_int(0, max_monster)
 
@@ -47,33 +40,9 @@ def place_objects(rect):
 
         if not Object.is_blocked(x, y):
             choice = random_choice(item_chances)
-            if choice == 'heal':
-                item_component = Item(use_function=spells.cast_heal)
-                item = Object.Object(x, y, '!', 'healing potion',
-                                     color.violet, item=item_component)
-            elif choice == 'lightning':
-                item_component = Item(use_function=spells.cast_lightning)
-                item = Object.Object(x, y, '#', 'scroll of lightning bolt',
-                                     color.light_yellow, item=item_component)
-            elif choice == 'fireball':
-                item_component = Item(use_function=spells.cast_fireball)
-                item = Object.Object(x, y, '#', 'scroll of fireball',
-                                     color.light_yellow, item=item_component)
-            elif choice == 'confuse':
-                item_component = Item(use_function=spells.cast_confuse)
-                item = Object.Object(x, y, '#', 'scroll of confusion',
-                                     color.light_yellow, item=item_component)
-            elif choice == 'sword':
-                equipment_component = Equipment(slot='right hand',
-                                                power_bonus=3)
-                item = Object.Object(x, y, '/', 'sword', color.sky,
-                                     equipment=equipment_component)
-            elif choice == 'shield':
-                equipment_component = Equipment(slot='right hand',
-                                                defense_bonus=1)
-                item = Object.Object(x, y, '[', 'shield',
-                                     color.darker_orange,
-                                     equipment=equipment_component)
+            item = copy.deepcopy(items[choice])
+            item.x = x
+            item.y = y
             settings.objects.append(item)
             item.send_to_back()
             item.always_visible = True

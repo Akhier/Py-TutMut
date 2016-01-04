@@ -1,0 +1,23 @@
+ITEMS
+
+{
+[name=sword]
+[char=/]
+[color=sky]
+[equipment
+	<slot=right hand>
+	<power_bonus=3>
+[placement
+	<4:5>]
+}
+
+{
+[name=shield]
+[char=\[]
+[color=darker_orange]
+[equipment
+	<slot=right hand>
+	<defense_bonus=3>]
+[placement
+	<8:15>]
+}

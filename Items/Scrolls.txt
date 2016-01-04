@@ -1,0 +1,37 @@
+ITEMS
+
+{
+[name=healing potion]
+[char=!]
+[color=violet]
+[use=cast_heal]
+[placement
+	<0:35>]
+}
+
+{
+[name=scroll of lightning bolt]
+[char=#]
+[color=light_yellow]
+[use=cast_lightning]
+[placement
+	<4:25>]
+}
+
+{
+[name=scroll of fireball]
+[char=#]
+[color=light_yellow]
+[use=cast_fireball]
+[placement
+	<6:25>]
+}
+
+{
+[name=scroll of confusion]
+[char=#]
+[color=light_yellow]
+[use=cast_confuse]
+[placement
+	<2:10>]
+}

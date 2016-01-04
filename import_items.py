@@ -1,23 +1,23 @@
+import spells
 import color
 import glob
-from Deaths import Death_type
-from Fighter import Fighter
+from Equipment import Equipment
 from Object import Object
-from AI import AI_type
+from Item import Item
 
 
-def import_monsters():
-    monsters = {}
-    monster = []
+def import_items():
+    items = {}
+    item = []
     processing = False
     direct_read = False
     part = ''
-    for filename in glob.glob('Monsters/*.txt'):
+    for filename in glob.glob('Items/*.txt'):
         textfile = open(filename, 'r')
-        if textfile.read(8) == 'MONSTERS':
+        if textfile.read(5) == 'ITEMS':
             for c in textfile.read():
                 if c == '{' and not processing:
-                    monster = []
+                    item = []
                     processing = True
                 if processing:
                     if c == '\\' and not direct_read:
@@ -28,24 +28,23 @@ def import_monsters():
                     elif c == '[':
                         part = ''
                     elif c == ']':
-                        monster.append(part)
+                        item.append(part)
                     elif c == '}':
-                        finishedmonster = make_monster(monster)
-                        monsters[finishedmonster.name] = finishedmonster
+                        finisheditem = make_item(item)
+                        items[finisheditem.name] = finisheditem
                         processing = False
                     else:
                         part = part + c
-    return monsters
+    return items
 
 
-def make_monster(parts):
+def make_item(parts):
     name = 'default'
     char = '@'
     colour = 'white'
-    blocking = False
-    fighter_component = None
-    ai_component = None
+    equipment_component = None
     placement_range_component = None
+    use_component = None
     for p in parts:
         if p.startswith('name'):
             name = p.split('=', 1)[1]
@@ -53,9 +52,10 @@ def make_monster(parts):
             char = p[-1:]
         elif p.startswith('color'):
             colour = p.split('=', 1)[1]
-        elif p == 'blocks':
-            blocking = True
-        elif p.startswith('fighter'):
+        elif p.startswith('use'):
+            use_component = Item(use_function=getattr(spells,
+                                                      p.split('=', 1)[1]))
+        elif p.startswith('equipment'):
             piece = ''
             pieces = []
             for c in p:
@@ -66,9 +66,7 @@ def make_monster(parts):
                 else:
                     piece = piece + c
 
-            fighter_component = make_fighter(pieces)
-        elif p.startswith('ai'):
-            ai_component = p.split('=', 1)[1]
+            equipment_component = make_equipment(pieces)
         elif p.startswith('placement'):
             piece = ''
             pieces = []
@@ -83,32 +81,28 @@ def make_monster(parts):
             placement_range_component = make_placement_range(pieces)
 
     return Object(0, 0, char, name, getattr(color, colour),
-                  blocks=blocking, fighter=fighter_component,
-                  ai=AI_type[ai_component](),
+                  item=use_component, equipment=equipment_component,
                   placement_range=placement_range_component)
 
 
-def make_fighter(pieces):
-    _hp = 0
-    _defense = 0
-    _power = 0
-    _xp = 0
-    death_component = 'basic_death'
+def make_equipment(pieces):
+    _slot = 'Test'
+    _power_bonus = 0
+    _defense_bonus = 0
+    _max_hp_bonus = 0
     for p in pieces:
-        if p.startswith('hp'):
-            _hp = p.split('=', 1)[1]
-        elif p.startswith('def'):
-            _defense = p.split('=', 1)[1]
-        elif p.startswith('pow'):
-            _power = p.split('=', 1)[1]
-        elif p.startswith('xp'):
-            _xp = p.split('=', 1)[1]
-        elif p.startswith('death'):
-            death_component = p.split('=', 1)[1]
+        if p.startswith('slot'):
+            _slot = p.split('=', 1)[1]
+        elif p.startswith('power_bonus'):
+            _power_bonus = p.split('=', 1)[1]
+        elif p.startswith('defense_bonus'):
+            _defense_bonus = p.split('=', 1)[1]
+        elif p.startswith('max_hp_bonus'):
+            _max_hp_bonus = p.split('=', 1)[1]
 
-    return Fighter(hp=int(_hp), defense=int(_defense),
-                   power=int(_power), xp=int(_xp),
-                   death_function=Death_type[death_component])
+    return Equipment(_slot, power_bonus=int(_power_bonus),
+                     defense_bonus=int(_defense_bonus),
+                     max_hp_bonus=int(_max_hp_bonus))
 
 
 def make_placement_range(pieces):
@@ -120,10 +114,10 @@ def make_placement_range(pieces):
     return placement_range_component
 
 
-monsters = import_monsters()
+items = import_items()
 
 
 if __name__ == '__main__':
-    monsterlist = import_monsters()
-    for key in monsterlist:
+    itemlist = import_items()
+    for key in itemlist:
         print(key)
