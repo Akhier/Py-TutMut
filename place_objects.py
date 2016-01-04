@@ -1,7 +1,7 @@
 import settings
 import Object
 import copy
-from import_monsters import monsters
+from import_monsters import monsters, packs
 from import_items import items
 
 
@@ -30,6 +30,8 @@ def place_objects(rect):
             monster = copy.deepcopy(monsters[choice])
             monster.x = x
             monster.y = y
+            if choice in packs:
+                place_pack(monster)
             settings.objects.append(monster)
 
     num_items = settings.RNG.get_int(0, max_items)
@@ -46,6 +48,33 @@ def place_objects(rect):
             settings.objects.append(item)
             item.send_to_back()
             item.always_visible = True
+
+
+def place_pack(monster):
+    (min, max) = packs[monster.name]
+    cur_x = monster.x
+    cur_y = monster.y
+    failures = 0
+    monsters_to_place = settings.RNG.get_int(min, max) - 1
+    while monsters_to_place > 0:
+        x = cur_x + settings.RNG.get_int(-1, 1)
+        y = cur_y + settings.RNG.get_int(-1, 1)
+        if not Object.is_blocked(x, y):
+            packmonster = copy.deepcopy(monster)
+            packmonster.x = x
+            packmonster.y = y
+            settings.objects.append(packmonster)
+            cur_x = x
+            cur_y = y
+            monsters_to_place -= 1
+            failures = 0
+        else:
+            failures += 1
+            if failures > 10:
+                cur_x = monster.x
+                cur_y = monster.y
+            if failures > 30:
+                monsters_to_place -= 1
 
 
 def random_choice(chances_dict):

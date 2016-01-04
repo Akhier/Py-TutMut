@@ -48,4 +48,5 @@ MONSTERS
 [ai=BasicMonster]
 [placement
 	<0:20>]
+[pack=3:5]
 }

@@ -9,6 +9,7 @@ from AI import AI_type
 def import_monsters():
     monsters = {}
     monster = []
+    packs = {}
     processing = False
     direct_read = False
     part = ''
@@ -31,11 +32,14 @@ def import_monsters():
                         monster.append(part)
                     elif c == '}':
                         finishedmonster = make_monster(monster)
+                        packsize = check_if_pack(monster)
+                        if packsize:
+                            packs[finishedmonster.name] = packsize
                         monsters[finishedmonster.name] = finishedmonster
                         processing = False
                     else:
                         part = part + c
-    return monsters
+    return monsters, packs
 
 
 def make_monster(parts):
@@ -120,7 +124,17 @@ def make_placement_range(pieces):
     return placement_range_component
 
 
-monsters = import_monsters()
+def check_if_pack(parts):
+    for p in parts:
+        if p.startswith('pack'):
+            s = p.split('=')[1].split(':')
+            i = [int(s[0]), int(s[1])]
+            return i
+
+    return False
+
+
+(monsters, packs) = import_monsters()
 
 
 if __name__ == '__main__':
