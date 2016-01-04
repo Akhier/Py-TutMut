@@ -58,3 +58,21 @@ def cast_confuse():
     message('The eyes of the ' + monster.name +
             ' look vacant, as he starts to stumble around.',
             color.light_green)
+
+
+def cast_self_destruct(self):
+    x = self.owner.x
+    y = self.owner.y
+    for obj in settings.objects:
+        if obj.distance(x, y) <= 2 and obj.fighter:
+            message('The ' + obj.name + ' gets burned for 5 hit points.',
+                    color.orange)
+            obj.fighter.take_damage(5)
+
+    if not self.owner.fighter:
+        self.owner.char = '~'
+        self.owner.color = color.darker_red
+        self.owner.blocks = False
+        self.owner.fighter = None
+        self.owner.ai = None
+        self.owner.name = 'Remains too destroyed to identify'

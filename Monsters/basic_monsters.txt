@@ -33,3 +33,19 @@ MONSTERS
 	<5:30>
 	<7:60>]
 }
+
+{
+[name=firebat]
+[char=b]
+[color=darker_orange]
+[blocks]
+[fighter
+	<hp=5>
+	<def=0>
+	<pow=1>
+	<xp=10>
+	<death=explosive_death>]
+[ai=BasicMonster]
+[placement
+	<0:20>]
+}
