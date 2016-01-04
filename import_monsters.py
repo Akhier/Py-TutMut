@@ -39,6 +39,7 @@ def make_monster(parts):
     blocking = False
     fighter_component = None
     ai_component = None
+    placement_range_component = None
     for p in parts:
         if p.startswith('name'):
             name = p.split('=', 1)[1]
@@ -62,10 +63,23 @@ def make_monster(parts):
             fighter_component = make_fighter(pieces)
         elif p.startswith('ai'):
             ai_component = p.split('=', 1)[1]
+        elif p.startswith('placement'):
+            piece = ''
+            pieces = []
+            for c in p:
+                if c == '<':
+                    piece = ''
+                elif c == '>':
+                    pieces.append(piece)
+                else:
+                    piece = piece + c
+
+            placement_range_component = make_placement_range(pieces)
 
     return Object(0, 0, char, name, getattr(color, colour),
                   blocks=blocking, fighter=fighter_component,
-                  ai=AI_type[ai_component]())
+                  ai=AI_type[ai_component](),
+                  placement_range=placement_range_component)
 
 
 def make_fighter(pieces):
@@ -86,8 +100,18 @@ def make_fighter(pieces):
         elif p.startswith('death'):
             death_component = p.split('=', 1)[1]
 
-    return Fighter(hp=_hp, defense=_defense, power=_power, xp=_xp,
+    return Fighter(hp=int(_hp), defense=int(_defense),
+                   power=int(_power), xp=int(_xp),
                    death_function=Death_type[death_component])
+
+
+def make_placement_range(pieces):
+    placement_range_component = []
+    for p in pieces:
+        s = p.split(':')
+        placement_range_component.append([int(s[1]), int(s[0])])
+
+    return placement_range_component
 
 
 monsters = import_monsters()

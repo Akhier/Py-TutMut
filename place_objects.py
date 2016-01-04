@@ -12,8 +12,9 @@ def place_objects(rect):
     max_monster = from_dungeon_level([[2, 1], [3, 4], [5, 6]])
 
     monster_chances = {}
-    monster_chances['orc'] = 80
-    monster_chances['troll'] = from_dungeon_level([[15, 3], [30, 5], [60, 7]])
+    for key in monsters:
+        monster_chances[key] = \
+            from_dungeon_level(monsters[key].placement_range)
 
     max_items = from_dungeon_level([[1, 1], [2, 4]])
 

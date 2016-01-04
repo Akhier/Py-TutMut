@@ -4,11 +4,11 @@ import settings
 class Fighter:
 
     def __init__(self, hp, defense, power, xp, death_function=None):
-        self.base_max_hp = int(hp)
-        self.hp = int(hp)
-        self.base_defense = int(defense)
-        self.base_power = int(power)
-        self.xp = int(xp)
+        self.base_max_hp = hp
+        self.hp = hp
+        self.base_defense = defense
+        self.base_power = power
+        self.xp = xp
         self.death_function = death_function
 
     @property

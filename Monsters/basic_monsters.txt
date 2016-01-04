@@ -12,6 +12,8 @@ MONSTERS
 	<xp=35>
 	<death=basic_death>]
 [ai=BasicMonster]
+[placement
+	<0:80>]
 }
 
 {
@@ -26,4 +28,8 @@ MONSTERS
 	<xp=100>
 	<death=basic_death>]
 [ai=BasicMonster]
+[placement
+	<3:15>
+	<5:30>
+	<7:60>]
 }

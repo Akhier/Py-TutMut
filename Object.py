@@ -9,7 +9,7 @@ class Object:
 
     def __init__(self, x, y, char, name, color, blocks=False,
                  always_visible=False, fighter=None, ai=None,
-                 item=None, equipment=None):
+                 item=None, equipment=None, placement_range=None):
         self.x = x
         self.y = y
         self.char = char
@@ -35,6 +35,8 @@ class Object:
 
             self.item = Item()
             self.item.owner = self
+
+        self.placement_range = placement_range
 
     def move(self, dx, dy):
         if not is_blocked(self.x + dx, self.y + dy):
