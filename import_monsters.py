@@ -10,6 +10,7 @@ def import_monsters():
     monsters = {}
     monster = []
     processing = False
+    direct_read = False
     part = ''
     for filename in glob.glob('Monsters/*.txt'):
         textfile = open(filename, 'r')
@@ -19,7 +20,12 @@ def import_monsters():
                     monster = []
                     processing = True
                 if processing:
-                    if c == '[':
+                    if c == '\\' and processing and not direct_read:
+                        direct_read = True
+                    elif direct_read:
+                        part = part + c
+                        direct_read = False
+                    elif c == '[':
                         part = ''
                     elif c == ']':
                         monster.append(part)
